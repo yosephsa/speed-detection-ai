@@ -41,7 +41,7 @@ def opticalFlowDenseB(image_current, image_next):
     gray_next = cv.cvtColor(image_next, cv.COLOR_RGB2GRAY)
     
     
-    hsv = np.zeros((480, 640, 3))
+    hsv = np.zeros((66, 220, 3))
     # set saturation
     hsv[:,:,1] = cv.cvtColor(image_next, cv.COLOR_RGB2HSV)[:,:,1]
  
@@ -86,8 +86,18 @@ cap = cv.VideoCapture(cv.samples.findFile("data_raw/test.mp4"))
 while(1):
     ret, frame1 = cap.read()
     ret, frame2 = cap.read()
+    frame1 = frame1[190:360, 0:640]
+    frame2 = frame2[190:360, 0:640]
 
-    rgb_flow = opticalFlowDenseB(frame1, frame2)
+    dim = (220, 66)
+    frame1 = cv.resize(frame1, dim, interpolation = cv.INTER_AREA)
+    frame2 = cv.resize(frame2, dim, interpolation = cv.INTER_AREA)
+    
+    
+    rgb_flow = opticalFlowDenseA(frame1, frame2)
+    dim = (640, 160)
+    rgb_flow = cv.resize(rgb_flow, dim, interpolation = cv.INTER_AREA)
+    frame2 = cv.resize(frame2, dim, interpolation = cv.INTER_AREA)
 
     cv.imshow("frame2", rgb_flow)
     cv.imshow("frame1", frame2)
